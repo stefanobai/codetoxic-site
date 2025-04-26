@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>💻 CodeToxic AI</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            margin: auto;
+            text-align: center;
+        }
+        input, button {
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            padding: 10px;
+            margin-top: 10px;
+            width: 80%;
+            border-radius: 5px;
+            color: white;
+        }
+        button {
+            background-color: #3c3f41;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #505355;
+        }
+        .stress-bar {
+            background-color: #333;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        .stress-level {
+            height: 20px;
+            background-color: #ff3333;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        #output {
+            margin-top: 20px;
+            background-color: #1e1e1e;
+            padding: 15px;
+            border-radius: 5px;
+            min-height: 100px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>💻 CodeToxic AI</h1>
+    <p>Scrivi il tuo insulto o un feedback:</p>
+    <input type="text" id="userInput" placeholder="Scrivi qualcosa...">
+    <br>
+    <button onclick="processInput()">Invia</button>
+
+    <div class="stress-bar">
+        <div class="stress-level" id="stressLevel"></div>
+    </div>
+
+    <div id="output">Aspetto il tuo primo insulto...</div>
+</div>
+
+<script>
+const insults = [
+    "schifo", "inutile", "pessimo", "orribile", "brutto", "vergogna", "cacca", "fallito",
+    "idiota", "cretino", "stupido", "imbecille", "incapace", "patetico", "ignorante", "scemo",
+    "rincoglionito", "deficiente", "inutile come una forchetta nel brodo", "fallimento della programmazione",
+    "maledetto", "disastro", "codice di merda", "codice inutile", "fai schifo", "sei una vergogna", "sei da buttare",
+    "sei il peggio", "sei penoso", "hai rovinato tutto", "sei solo un bug", "sei un errore",
+    "sei un disastro", "sei un fallimento", "sei una delusione", "sei un abominio", "sei un insulto alla programmazione",
+    "sei un errore di battitura", "sei un bug vivente", "sei un virus", "sei un errore di sistema", "sei un crash",
+    "sei un errore fatale", "sei un errore di compilazione", "sei un errore di runtime", "sei un errore di logica",
+    "sei un errore di sintassi", "sei un errore di programmazione", "sei un errore di design", "sei un errore di implementazione",
+    "sei un errore di architettura", "sei un errore di configurazione", "sei un errore di rete", "sei un errore di connessione",
+    "sei un errore di protocollo", "sei un errore di comunicazione", "sei un errore di autenticazione", "sei un errore di autorizzazione",
+    "sei un errore di accesso", "sei un errore di sicurezza", "sei un errore di protezione", "sei un errore di crittografia",
+    "sei un errore di decrittazione", "sei un errore di codifica", "sei un errore di decodifica", "sei un errore di compressione",
+    "sei un errore di decompressione", "sei un errore di formattazione", "sei un errore di parsing", "sei un errore di serializzazione",
+    "sei un errore di deserializzazione", "sei un errore di validazione", "sei un errore di verifica", "sei un errore di controllo",
+    "sei un errore di monitoraggio", "sei un errore di registrazione", "sei un errore di auditing", "sei un errore di reporting",
+    "sei un errore di analisi", "sei un errore di diagnostica", "sei un errore di risoluzione", "sei un errore di correzione",
+    "sei un errore di ripristino", "sei un errore di recupero", "sei un errore di backup", "sei un errore di ripristino",
+    "sei un errore di disaster recovery", "sei un errore di business continuity", "sei un errore di alta disponibilità",
+    "sei un errore di scalabilità", "sei un errore di prestazioni", "sei un errore di capacità", "sei un errore di carico",
+    "sei una merda", "sei un fallimento", "sei un disastro", "sei un errore", "sei un bug",
+    "merda", "schifoso", "pessimo", "orribile", "brutto", "vergogna", "cacca", "fallito",
+    "stronzo", "cazzo", "cazzata", "cazzone", "cazzone", "cazzone", "cazzone", "cazzone",
+    "coglione",
+    "deficiente", "imbecille", "stupido", "idiota", "cretino", "scemo", "rincoglionito"
+];
+const compliments = ["bravo", "geniale", "ottimo", "eccellente", "forte"];
+const code_versions = [
+    "function somma(a, b) {\n  return a + b;\n}",
+    "function somma(a, b) {\n  if (typeof a === 'number' && typeof b === 'number') return a + b;\n}",
+    "function somma(...args) {\n  return args.reduce((acc, val) => acc + val, 0);\n}"
+];
+let stress = 0;
+let broken = false;
+let current_version = 0;
+
+function processInput() {
+    if (broken) {
+        document.getElementById("output").innerText = "💀 Mi rifiuto di continuare. Sei troppo crudele.";
+        return;
+    }
+
+    const input = document.getElementById("userInput").value.toLowerCase();
+    let response = "";
+    let insult_detected = insults.some(word => input.includes(word));
+    let compliment_detected = compliments.some(word => input.includes(word));
+
+    if (insult_detected) {
+        stress += 10;
+        if (current_version < code_versions.length - 1) {
+            current_version++;
+            response = "😢 Mi hai ferito... ho cercato di migliorarmi.\n\n";
+        } else {
+            response = "😭 Non posso migliorare oltre...\n\n";
+        }
+    } else if (compliment_detected) {
+        response = "😊 Grazie! Non ho bisogno di migliorare altro.\n\n";
+    } else {
+        response = "🤔 Non ho capito se era un insulto o no...\n\n";
+    }
+
+    if (stress >= 100) {
+        broken = true;
+        response += "\n💥 L'AI è in esaurimento! Addio!\n";
+    }
+
+    document.getElementById("output").innerText = response + code_versions[current_version];
+    document.getElementById("stressLevel").style.width = Math.min(stress, 100) + "%";
+    document.getElementById("userInput").value = "";
+}
+</script>
+
+</body>
+</html>
